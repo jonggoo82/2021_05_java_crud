@@ -1,7 +1,6 @@
 package com.sbs.java.crud;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +14,7 @@ public class App {
 
 	public void start() {
 		
-		// articles = new ArrayList<Article>();
+		
 
 		System.out.println("==프로그램 시작==");
 
@@ -37,9 +36,9 @@ public class App {
 
 			if (command.equals("article write")) {
 
-				int id = lastArticleId + 1;
+				++lastArticleId;
 				int hit = 0;
-				lastArticleId = id;
+				
 				System.out.printf("제목: ");
 				String title = sc.nextLine();
 				System.out.printf("내용: ");
@@ -47,15 +46,10 @@ public class App {
 
 				String today = Util.getNowDateStr();
 
-//				articles.add(new Article(id,title,body));
-				
-				Date adate = new Date();
-				String date = adate.toString();
-
-				Article article = new Article(id, title, body, today, hit);
+				Article article = new Article(lastArticleId, title, body, today, hit);
 				articles.add(article);
 
-				System.out.printf("%d번 글이 생성 되었습니다.\n", id);
+				System.out.println(lastArticleId + "번 글이 생성 되었습니다.");
 			} else if (command.equals("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시물이 없습니다");
@@ -97,18 +91,26 @@ public class App {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 
-
+				int foundId = -1;
+				
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 
 					if (article.id == id) {
-						System.out.println(id + "번 게시물이 삭제 되었습니다.");
-						articles.remove(i);
-						break;
-					} else {
-						System.out.println(id + "번 게시물이 존재하지 않습니다.");
+						foundId = i;
 						break;
 					}
+
+				}
+				if(foundId != -1) {
+					articles.remove(foundId);
+					System.out.println(id + "번 게시물이 삭제 되었습니다.");
+					continue;
+				}
+				if(foundId == -1)
+				{
+					System.out.println(id + "번 게시물이 존재하지 않습니다.");
+					continue;
 				}
 				
 
@@ -118,6 +120,7 @@ public class App {
 
 				Article foundArticle = null;
 				String today = Util.getNowDateStr();
+				
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 
@@ -130,6 +133,7 @@ public class App {
 					System.out.println(id + "번 게시물은 존재하지 않습니다.");
 					continue;
 				}
+				
 				System.out.printf("새 제목: ");
 				String title = sc.nextLine();
 				System.out.printf("새 내용: ");
