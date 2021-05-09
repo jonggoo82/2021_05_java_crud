@@ -5,13 +5,14 @@ import java.util.List;
 import com.sbs.java.crud.dto.Article;
 
 public class ArticleSearch {
-	List<Article> foundArticle;
+	public List<Article> foundArticle;
+	public int id = -1;
 
 	public ArticleSearch(List<Article> foundArticle) {
 		this.foundArticle = foundArticle;
 	}
 
-	Article getArticle(String command) {
+	public Article getArticle(String command) {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 
@@ -19,11 +20,11 @@ public class ArticleSearch {
 			Article article = foundArticle.get(i);
 
 			if (article.id == id) {
+				this.id = i;
 				return article;
 			}
-			
 		}
+		System.out.println(id + "번 게시물은 존재하지 않습니다.");
 		return null;
-
 	}
 }
